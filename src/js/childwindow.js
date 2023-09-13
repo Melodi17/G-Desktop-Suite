@@ -34,6 +34,7 @@ var createChildWindow = function (event, url, frameName, disposition, options) {
     height: options.size ? options.size[1] : childWindowState.height,
     minWidth: 300,
     minHeight: 300,
+    frame: false,
     backgroundColor: "#FFF",
     titleBarStyle: "hidden",
     center: true,
@@ -81,7 +82,7 @@ var createChildWindow = function (event, url, frameName, disposition, options) {
 
   childview.webContents.once("ready-to-show", () => {
     childwin.show();
-    childview.focus();
+    // childview.focus();
   });
 
   // On new window, create another window
@@ -132,6 +133,11 @@ var createChildWindow = function (event, url, frameName, disposition, options) {
   if (isDev) {
     childwin.webContents.openDevTools();
     childview.webContents.openDevTools();
+
+    electronLocalshortcut.register(win, "CmdOrCtrl+Shift+I", () => {
+      win.webContents.toggleDevTools();
+      view.webContents.toggleDevTools();
+    });
   }
 };
 

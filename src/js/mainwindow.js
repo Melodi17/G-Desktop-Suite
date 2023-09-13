@@ -28,6 +28,7 @@ const createMainWindow = () => {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
+    frame: false,
     minWidth: 300,
     minHeight: 300,
     backgroundColor: "#FFF",
@@ -85,8 +86,8 @@ const createMainWindow = () => {
   view.webContents.loadURL(windowSettings.url, { userAgent: "Chrome" });
 
   // Menu
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  // const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(null);
 
   // Load template containing title bar
   win.loadFile(path.join(__dirname, "../templates/index.html"));
@@ -127,6 +128,23 @@ const createMainWindow = () => {
     }
   });
 
+  win.on("load", () => {
+    // find the header element
+    // const header = win.webContents.findInPage("header");
+    // add css to header: -webkit-app-region: drag;
+    // header.insertCSS(`-webkit-app-region: drag;`);
+
+    // make header's 
+
+    // win.webContents.insertCSS(`
+    //   header {
+    //     background-color: blue;
+    //     padding: 10px;
+    //     -webkit-app-region: drag;
+    //   }
+    // `);
+  });
+
   // Emitted when the window is closed.
   win.on("closed", () => {
     win = null;
@@ -153,6 +171,12 @@ const createMainWindow = () => {
   if (isDev) {
     win.webContents.openDevTools();
     view.webContents.openDevTools();
+
+    // register Control+Shift+I
+    electronLocalshortcut.register(win, "CmdOrCtrl+Shift+I", () => {
+      win.webContents.toggleDevTools();
+      view.webContents.toggleDevTools();
+    });
   }
 };
 
